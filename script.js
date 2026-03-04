@@ -1,4 +1,4 @@
-const SERVER_IP = "play.minewater.es";
+const SERVER_IP = "minewater.noctier.net:25583";
 
 function copiarIP(){
     navigator.clipboard.writeText(SERVER_IP);
@@ -7,7 +7,7 @@ function copiarIP(){
 
 async function updateServer(){
     try{
-        const res = await fetch(`https://api.mcsrvstat.us/3/${minewater.noctier.net}`);
+        const res = await fetch(`https://api.mcsrvstat.us/3/${SERVER_IP`);
         const data = await res.json();
 
         if(data.online){
@@ -43,4 +43,5 @@ async function updateServer(){
 }
 
 updateServer();
+
 setInterval(updateServer,15000);
