@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MINEWATERNW · Mantenimiento</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+    :root {
+      --bg:     #06060d;
+      --ink:    #e8eaf6;
+      --muted:  #4a5080;
+      --accent: #2563eb;
+      --glow:   rgba(37,99,235,.35);
+      --border: rgba(37,99,235,.15);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── GRID BG ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(37,99,235,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37,99,235,.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+
+    /* ── GLOW ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(37,99,235,.1), transparent 70%);
+    }
+
+    /* ── CARD ── */
+    .card {
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 64px 48px;
+      max-width: 580px; width: 92%;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: rgba(6,6,13,.7);
+      backdrop-filter: blur(16px);
+      box-shadow:
+        0 0 0 1px rgba(37,99,235,.08),
+        0 40px 80px rgba(0,0,0,.6);
+      animation: fadeUp .7s ease both;
+    }
+
+    /* ── LOGO ── */
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 8vw, 64px);
+      letter-spacing: .12em;
+      line-height: 1;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #fff 0%, #93c5fd 60%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px; letter-spacing: .22em;
+      color: var(--accent); text-transform: uppercase;
+      margin-bottom: 48px;
+      opacity: .8;
+    }
+
+    /* ── ICON ── */
+    .icon-wrap {
+      display: flex; align-items: center; justify-content: center;
+      width: 72px; height: 72px; border-radius: 50%;
+      background: rgba(37,99,235,.1);
+      border: 1px solid rgba(37,99,235,.25);
+      margin: 0 auto 32px;
+      box-shadow: 0 0 32px rgba(37,99,235,.2);
+      animation: pulse 3s ease-in-out infinite;
+    }
+    .icon-wrap svg {
+      color: #60a5fa;
+    }
+
+    /* ── TEXT ── */
+    .status-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px; letter-spacing: .2em;
+      color: var(--accent); text-transform: uppercase;
+      margin-bottom: 14px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(28px, 5vw, 42px);
+      letter-spacing: .06em;
+      margin-bottom: 16px;
+      color: var(--ink);
+    }
+
+    .desc {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 380px;
+      margin: 0 auto 40px;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 48px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      margin: 0 auto 40px;
+    }
+
+    /* ── ETA ── */
+    .eta-wrap {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(37,99,235,.08);
+      border: 1px solid rgba(37,99,235,.18);
+      border-radius: 3px;
+      padding: 10px 20px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px; letter-spacing: .08em;
+      color: rgba(232,234,246,.5);
+    }
+    .eta-wrap svg { color: #60a5fa; flex-shrink: 0; }
+
+    /* ── FOOTER ── */
+    .footer-txt {
+      margin-top: 48px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px; letter-spacing: .12em;
+      color: rgba(74,80,128,.6);
+      text-transform: uppercase;
+    }
+
+    /* ── SCAN LINE ── */
+    .card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
+      animation: scan 3s ease-in-out infinite;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 20px rgba(37,99,235,.2); }
+      50%      { box-shadow: 0 0 40px rgba(37,99,235,.4); }
+    }
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50%      { opacity: .3; }
+    }
+    @keyframes scan {
+      0%   { background-position: -100% 0; opacity: 0; }
+      20%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { background-position: 200% 0; opacity: 0; }
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 48px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="logo">MINEWATERNW</div>
+  <div class="logo-sub">Community Platform</div>
+
+  <div class="icon-wrap">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      <line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+  </div>
+
+  <div class="status-label">
+    <span class="status-dot"></span>
+    En mantenimiento
+  </div>
+
+  <h1>Volvemos pronto</h1>
+
+  <div class="divider"></div>
+
+  <p class="desc">
+    Estamos realizando tareas de mantenimiento para mejorar la plataforma.
+    El servicio volverá a estar disponible en breve.
+  </p>
+
+  <div class="eta-wrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/>
+      <polyline points="12 6 12 12 16 14"/>
+    </svg>
+    Tiempo estimado: Unos días
+  </div>
+
+  <div class="footer-txt">MINEWATERNW · © 2026</div>
+
+</div>
+
+</body>
+</html>
